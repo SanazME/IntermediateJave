@@ -11,7 +11,7 @@ import java.util.Set;
  */
 public class Student {
 
-    enum Status {
+    public enum Status {
         FULL_TIME,
         PART_TIME,
         HIBERNATING
@@ -29,8 +29,8 @@ public class Student {
 
     public Student() {}
 
-    public Student(int id, String name, LocalDate dob) {
-        this(id, name, dob, Status.FULL_TIME, new HashSet<>());
+    public Student(String name, LocalDate dob) {
+        this(name, dob, Status.FULL_TIME, new HashSet<>());
 //        init(id, name, dob, new HashSet<>(), Status.FULL_TIME);
 //        this.id = id;
 //        this.name = name;
@@ -40,17 +40,17 @@ public class Student {
 //        this.status = Status.FULL_TIME;
     }
 
-    public Student(int id, String name, LocalDate dob, Status status, String ... phoneNumbers) {
+    public Student(String name, LocalDate dob, Status status, String ... phoneNumbers) {
         //this(id, name, dob, Status.FULL_TIME, Set.of(phoneNumbers));
 //        this(id, name, dob, Status.FULL_TIME, Collections.addAll(this.phoneNumbers = new HashSet<>(), phoneNumbers));
 
         this.phoneNumbers = new HashSet<>();
-        Collections.addAll(new HashSet<>(), phoneNumbers);
-        init(id, name, dob, status, this.phoneNumbers);
+        Collections.addAll(this.phoneNumbers, phoneNumbers);
+        init(name, dob, status, this.phoneNumbers);
     }
 
-    public Student(int id, String name, LocalDate dob, Status status, Set<String> phoneNumbers) {
-        init(id, name, dob, status, phoneNumbers);
+    public Student(String name, LocalDate dob, Status status, Set<String> phoneNumbers) {
+        init(name, dob, status, phoneNumbers);
 //        this.id = id;
 //        this.name = name;
 //        this.dob = dob;
@@ -58,7 +58,7 @@ public class Student {
 //        this.status = status;
     }
 
-    private void init(int id, String name, LocalDate dob, Status status, Set<String> phoneNumbers) {
+    private void init(String name, LocalDate dob, Status status, Set<String> phoneNumbers) {
         this.id = id;
         this.name = name;
         this.dob = dob;
@@ -79,9 +79,9 @@ public class Student {
         return name;
     }
 
-//    public void setName(String name) {
-//        this.name = name;
-//    }
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public LocalDate getDob() {
         return dob;
