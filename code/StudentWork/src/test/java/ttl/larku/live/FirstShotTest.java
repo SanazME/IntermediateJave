@@ -20,7 +20,7 @@ class ClassToTest
     }
 }
 
-public class FirstShot {
+public class FirstShotTest {
 
     @Test
     public void firstGuy() {
