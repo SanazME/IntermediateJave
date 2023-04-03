@@ -1,0 +1,14 @@
+1) Create a DAO for your CustomerService if you haven't already done so.
+
+2) Create a copy of the DAO.
+
+3) Create an interface and have both DAO's implement that interface.
+
+4) Create a Factory that you can use to inject the DAO into your CustomerService.
+   In this iteration you can hard code the type the Factory returns.
+
+5) Change the hardcoded type in the Factory to make sure your system
+   both daos.
+
+6) Implement a properties based mechanism to decide which DAO you are going
+   to use.
