@@ -1,8 +1,9 @@
 package ttl.larku.domain;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -16,17 +17,6 @@ public class Student {
         HIBERNATING
     }
 
-    /*
-   An integer id
-2. A name
-3. A dateOfBirth of type LocalDate
-1. You can initialize a LocalDate with the of method, e.g. LocalDate.of(1957, 10, 10)
-4. Zero or more phone numbers
-5. A status, which can have the following values:
-• Privileged
-• Normal
-• Restricted
-     */
 
     private int id;
     private String name;
@@ -37,8 +27,10 @@ public class Student {
     private Set<String> phoneNumbers;
     private Status status;
 
+    public Student() {}
+
     public Student(int id, String name, LocalDate dob) {
-        this(id, name, dob, new HashSet<>(), Status.FULL_TIME);
+        this(id, name, dob, Status.FULL_TIME, new HashSet<>());
 //        init(id, name, dob, new HashSet<>(), Status.FULL_TIME);
 //        this.id = id;
 //        this.name = name;
@@ -48,16 +40,25 @@ public class Student {
 //        this.status = Status.FULL_TIME;
     }
 
-    public Student(int id, String name, LocalDate dob, Set<String> phoneNumbers, Status status) {
-//        init(id, name, dob, phoneNumbers, status);
-        this.id = id;
-        this.name = name;
-        this.dob = dob;
-        this.phoneNumbers = phoneNumbers;
-        this.status = status;
+    public Student(int id, String name, LocalDate dob, Status status, String ... phoneNumbers) {
+        //this(id, name, dob, Status.FULL_TIME, Set.of(phoneNumbers));
+//        this(id, name, dob, Status.FULL_TIME, Collections.addAll(this.phoneNumbers = new HashSet<>(), phoneNumbers));
+
+        this.phoneNumbers = new HashSet<>();
+        Collections.addAll(new HashSet<>(), phoneNumbers);
+        init(id, name, dob, status, this.phoneNumbers);
     }
 
-    public void init(int id, String name, LocalDate dob, Set<String> phoneNumbers, Status status) {
+    public Student(int id, String name, LocalDate dob, Status status, Set<String> phoneNumbers) {
+        init(id, name, dob, status, phoneNumbers);
+//        this.id = id;
+//        this.name = name;
+//        this.dob = dob;
+//        this.phoneNumbers = phoneNumbers;
+//        this.status = status;
+    }
+
+    private void init(int id, String name, LocalDate dob, Status status, Set<String> phoneNumbers) {
         this.id = id;
         this.name = name;
         this.dob = dob;
@@ -78,31 +79,55 @@ public class Student {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+//    public void setName(String name) {
+//        this.name = name;
+//    }
 
     public LocalDate getDob() {
         return dob;
     }
 
-    public void setDob(LocalDate dob) {
-        this.dob = dob;
-    }
+//    public void setDob(LocalDate dob) {
+//        this.dob = dob;
+//    }
 
     public Set<String> getPhoneNumbers() {
         return phoneNumbers;
     }
 
-    public void setPhoneNumbers(Set<String> phoneNumbers) {
-        this.phoneNumbers = phoneNumbers;
-    }
+//    public void setPhoneNumbers(Set<String> phoneNumbers) {
+//        this.phoneNumbers = phoneNumbers;
+//    }
 
     public Status getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
-        this.status = status;
+//    public void setStatus(Status status) {
+//        this.status = status;
+//    }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", dob=" + dob +
+                ", phoneNumbers=" + phoneNumbers +
+                ", status=" + status +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Student student = (Student) o;
+        return id == student.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

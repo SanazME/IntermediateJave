@@ -87,10 +87,10 @@ public class Track {
 
 	public static Duration hmsToDuration(String hms) {
 		String sp [] = hms.split(":");
-		Duration duration = Duration.ofHours(Integer.valueOf(sp[0]))
-				.plusMinutes(Integer.valueOf(sp[1]));
+		Duration duration = Duration.ofHours(Integer.parseInt(sp[0]))
+				.plusMinutes(Integer.parseInt(sp[1]));
 		if(sp.length == 3) {
-			duration = duration.plusSeconds(Integer.valueOf(sp[2]));
+			duration = duration.plusSeconds(Integer.parseInt(sp[2]));
 		}
 		return duration;
 	}
