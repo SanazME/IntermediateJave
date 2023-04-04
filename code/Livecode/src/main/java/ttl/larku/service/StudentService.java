@@ -6,6 +6,7 @@ import ttl.larku.dao.MysqlStudentDAO;
 import ttl.larku.dao.StudentDAO;
 import ttl.larku.domain.Student;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -26,6 +27,12 @@ public class StudentService {
 
     private StudentDAO studentDAO = DAOFactory.studentDAO();
 
+    public Student insertStudent(String name, LocalDate dob, Student.Status status, String ... phoneNumbers) {
+        return insertStudent(new Student(name, dob, status, phoneNumbers));
+
+//        int newId = studentDAO.insert(student);
+//        return studentDAO.get(newId);
+    }
     public Student insertStudent(Student student) {
        return studentDAO.insert(student);
 

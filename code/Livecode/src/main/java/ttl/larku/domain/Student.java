@@ -1,5 +1,7 @@
 package ttl.larku.domain;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashSet;
@@ -9,7 +11,8 @@ import java.util.Set;
 /**
  * @author whynot
  */
-public class Student {
+public class Student implements Comparable<Student>{
+
 
     public enum Status {
         FULL_TIME,
@@ -129,5 +132,10 @@ public class Student {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public int compareTo(Student other) {
+        return Integer.compare(id, other.id);
     }
 }

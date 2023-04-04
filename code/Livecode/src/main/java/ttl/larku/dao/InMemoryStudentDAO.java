@@ -29,7 +29,7 @@ public class InMemoryStudentDAO implements StudentDAO {
     public Student insert(Student s) {
         int id = nextId++;
         //TODO - generate ID
-        s.setName("InMem:" + s.getName());
+        //s.setName("InMem:" + s.getName());
         s.setId(id);
         students.put(s.getId(), s);
 
@@ -43,8 +43,10 @@ public class InMemoryStudentDAO implements StudentDAO {
 
     @Override
     public List<Student> getAll() {
-        return List.copyOf(students.values());
+        //return List.copyOf(students.values());
+        return new ArrayList<>(students.values());
     }
+
     //    public Map<Integer, Student> getAll() {
     public Map<Integer, Student> oldGetAll() {
         Map<Integer, Student> copy = new HashMap<>(students);
