@@ -6,9 +6,8 @@ import ttl.larku.service.StudentService;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * @author whynot
@@ -22,7 +21,8 @@ public class Filtering {
         init(app.service);
 
 //        app.filter1();
-        app.filter2();
+        //app.filter2();
+        app.filter3();
 
     }
 
@@ -64,15 +64,61 @@ public class Filtering {
 
     }
 
-    public interface Checker {
-        public boolean check(Student s);
+    public void filter3() {
+        List<Student> students = service.getAllStudents();
+
+        List<Student> result = soSoChecker(students, (s) -> s.getDob().until(LocalDate.now(), ChronoUnit.YEARS) > 20);
+
+//        for (Student s : result) {
+//            System.out.println(s);
+//        }
+
+        List<Student> olderStudents = betterChecker(students, (s) -> s.getDob().until(LocalDate.now(), ChronoUnit.YEARS) > 20);
+        for (Student s : result) {
+            System.out.println(s);
+        }
+
+        List<String> lString = List.of("one", "two", "threeee");
+        GenericChecker<String> gcString = s -> s.length() > 4;
+
+        List<String> gt4 = betterChecker(lString, gcString);
+
+        List<String> gt5 = betterChecker(lString, s -> s.length() > 4);
+
+        List<String> gt6 = filter(lString, s -> s.length() > 4);
+
+        for(String s : gt4) {
+            System.out.println(s);
+        }
     }
 
-    class NameChecker implements Checker {
-        @Override
-        public boolean check(Student s) {
-            return s.getName().startsWith("M");
+    public <T> List<T> filter(List<T> input, Predicate<T> checker) {
+        List<T> result = new ArrayList<>();
+        for (T s : input) {
+            if (checker.test(s)) {
+                result.add(s);
+            }
         }
+        return result;
+    }
+
+    public interface GenericChecker<T>
+    {
+        public boolean check(T t);
+    }
+
+    public <T> List<T> betterChecker(List<T> input, GenericChecker<T> checker) {
+        List<T> result = new ArrayList<>();
+        for (T s : input) {
+            if (checker.check(s)) {
+                result.add(s);
+            }
+        }
+        return result;
+    }
+
+    public interface Checker {
+        public boolean check(Student s);
     }
 
     public List<Student> soSoChecker(List<Student> input, Checker checker) {
@@ -108,6 +154,12 @@ public class Filtering {
         return result;
     }
 
+    class NameChecker implements Checker {
+        @Override
+        public boolean check(Student s) {
+            return s.getName().startsWith("M");
+        }
+    }
 
     public static void init(StudentService ss) {
 
