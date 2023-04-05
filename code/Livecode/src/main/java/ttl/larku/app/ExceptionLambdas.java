@@ -6,8 +6,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * @author whynot
@@ -25,7 +26,8 @@ public class ExceptionLambdas {
 //            List<String> result = readFirstLinesWithoutStreams(fileNames);
 //        List<String> result = readFirstLinesWithStreamsTheBadWay(fileNames);
         //List<String> result = readFirstLinesWithStreamsADifferentWay(fileNames);
-        List<String> result = readFirstLinesWithStreamsAndOptional(fileNames);
+        //List<String> result = readFirstLinesWithStreamsAndOptional(fileNames);
+        List<String> result = callReadFirstLineWithWrapper(fileNames);
         for(String line : result) {
                 System.out.println("line: " + line);
             }
@@ -64,7 +66,7 @@ public class ExceptionLambdas {
 //                        System.err.println("Exception in readFirstLine" + e);
                     }
                 })
-                .collect(Collectors.toList());
+                .collect(toList());
 
         return result;
     }
@@ -81,7 +83,7 @@ public class ExceptionLambdas {
                         return Stream.empty();
                     }
                 })
-                .collect(Collectors.toList());
+                .collect(toList());
 
         return result;
     }
@@ -100,24 +102,28 @@ public class ExceptionLambdas {
                 })
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .collect(Collectors.toList());
+                .collect(toList());
 
         return result;
     }
 
-    public void callReadFirstLineWithWrapper(List<String> fileNames) {
-        List<Wrapper<String>> result = readFirstLinesWithWrapper(fileNames);
+    public List<String> callReadFirstLineWithWrapper(List<String> fileNames) {
+        List<Wrapper<String>> wResult = readFirstLinesWithWrapper(fileNames);
 
-        result.forEach(w -> {
-            if(w.value != null) {
-                String line = w.value;
-            }else {
-                Exception e = w.exception;
+        var result = wResult.stream()
+                .flatMap(w -> {
+                        if(w.value != null) {
+                            String line = w.value;
+                            return Stream.of(line);
+                        }else {
+                            Exception e = w.exception;
+                            //Deal with Exception
+                            return Stream.empty();
+                        }
+                    })
+                .collect(toList());
 
-            }
-        });
-
-
+        return result;
     }
 
     public List<Wrapper<String>> readFirstLinesWithWrapper(List<String> fileNames) {
@@ -125,14 +131,16 @@ public class ExceptionLambdas {
                 .map(fileName -> {
                     try(BufferedReader br = new BufferedReader(new FileReader(fileName));) {
                         String line = br.readLine();
-                        return new Wrapper<String>(line, null);
+                        //return new Wrapper<String>(line, null);
+                        return Wrapper.ofValue(line);
                     }catch(IOException e) {
 //                        throw new RuntimeException(e);
-                        System.err.println("Exception in readFirstLine" + e);
-                        return new Wrapper<String>(null, e);
+//                        System.err.println("Exception in readFirstLine" + e);
+                        //return new Wrapper<String>(null, e);
+                        return Wrapper.<String>ofError(e);
                     }
                 })
-                .collect(Collectors.toList());
+                .collect(toList());
 
         return result;
     }
@@ -144,8 +152,16 @@ class Wrapper<T> {
     public T value;
     public Exception exception;
 
-    public Wrapper(T value, Exception e) {
+    private Wrapper(T value, Exception e) {
         this.value = value;
         this.exception = e;
+    }
+
+    public static <X> Wrapper<X> ofValue(X value) {
+        return new Wrapper<X>(value, null);
+    }
+
+    public static <X> Wrapper<X> ofError(Exception e) {
+        return new Wrapper<X>(null, e);
     }
 }

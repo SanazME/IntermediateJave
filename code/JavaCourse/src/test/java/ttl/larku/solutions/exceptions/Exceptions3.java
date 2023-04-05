@@ -37,7 +37,6 @@ public class Exceptions3 {
         return results;
     }
 
-
     public String connectAndGetResult(String address) throws IOException {
         URL url = new URL(address);
         URLConnection connection = url.openConnection();

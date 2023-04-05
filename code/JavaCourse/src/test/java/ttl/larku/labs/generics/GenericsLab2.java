@@ -1,11 +1,16 @@
 package ttl.larku.labs.generics;
 
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * TODO - Comments indicate where you need to make changes. In some places code is
- * commented out and you need to uncomment it and make it work.
- * In other places you need to make changes to compiling code.
+ *  commented out and you need to uncomment it and make it work.
+ *  In other places you need to make changes to compile the code.
  *
  * @author whynot
  */
@@ -26,23 +31,35 @@ public class GenericsLab2 {
     }
 
     //TODO - Uncomment the class and finish implementation.
-    /*
     class Dog extends Pet {
+        public Dog(String name) {
+            super(name);
+        }
+
+        @Override
+        public void speak() {
+            System.out.println("Woof");
+        }
     }
-     */
 
     //TODO - Uncomment the class and finish implementation.
     // Also may need to look up how Llama's speak.
-    /*
     class Llama extends Pet {
+        public Llama(String name) {
+            super(name);
+        }
+
+        @Override
+        public void speak() {
+            System.out.println("Hmmmmm");
+        }
     }
-    */
 
 
     //TODO - This function performs an operation on each Pet in a List
     // and then adds it to another List.  It's signature will need
     // some fiddling around with to get everything to compile.
-    public void fromOneToTheOther(List<Pet> to, List<Pet> from) {
+    public void fromOneToTheOther(List<? super Pet> to, List<? extends Pet> from) {
         for (Pet pet : from) {
             pet.speak();
             to.add(pet);
@@ -59,32 +76,32 @@ public class GenericsLab2 {
      *  because it would result in a corrupted List if it was allowed.
      *  But only one, all the remaining calls should work.
      */
-//    @Test
-//    public void test1() {
-//        List<Pet> pets = new ArrayList<>();
-//        Dog dog = new Dog("Rufus");
-//        pets.add(dog);
-//        Llama llama = new Llama("Joey");
-//        pets.add(llama);
+    @Test
+    public void test1() {
+        List<Pet> pets = new ArrayList<>();
+        Dog dog = new Dog("Rufus");
+        pets.add(dog);
+        Llama llama = new Llama("Joey");
+        pets.add(llama);
+
+        List<Pet> giveMe = new ArrayList<>();
+        fromOneToTheOther(giveMe, pets);
+        assertEquals(2, giveMe.size());
+    }
 //
-//        List<Pet> giveMe = new ArrayList<>();
-//        fromOneToTheOther(giveMe, pets);
-//        assertEquals(2, giveMe.size());
-//    }
-//
-//    @Test
-//    public void test2() {
-//        List<Pet> pets = new ArrayList<>();
-//        Dog dog = new Dog("Rufus");
-//        Llama llama = new Llama("Joey");
-//        pets.add(dog);
-//        List<Pet> giveMe = new ArrayList<>();
-//
-//        List<Dog> dogs = new ArrayList<>();
-//        dogs.add(dog);
-//        fromOneToTheOther(giveMe, dogs);
-//        assertEquals(1, giveMe.size());
-//    }
+    @Test
+    public void test2() {
+        List<Pet> pets = new ArrayList<>();
+        Dog dog = new Dog("Rufus");
+        Llama llama = new Llama("Joey");
+        pets.add(dog);
+        List<Pet> giveMe = new ArrayList<>();
+
+        List<Dog> dogs = new ArrayList<>();
+        dogs.add(dog);
+        fromOneToTheOther(giveMe, dogs);
+        assertEquals(1, giveMe.size());
+    }
 //
 //    @Test
 //    public void test3() {
@@ -98,15 +115,15 @@ public class GenericsLab2 {
 //        assertEquals(1, giveMeDogs.size());
 //    }
 //
-//    @Test
-//    public void test4() {
-//        Llama llama = new Llama("Joey");
-//        List<Llama> llammas = new ArrayList<>();
-//        llammas.add(llama);
-//        List<Pet> giveMe = new ArrayList<>();
-//
-//        fromOneToTheOther(giveMe, llammas);
-//        assertEquals(1, giveMe.size());
-//
-//    }
+    @Test
+    public void test4() {
+        Llama llama = new Llama("Joey");
+        List<Llama> llammas = new ArrayList<>();
+        llammas.add(llama);
+        List<Pet> giveMe = new ArrayList<>();
+
+        fromOneToTheOther(giveMe, llammas);
+        assertEquals(1, giveMe.size());
+
+    }
 }
