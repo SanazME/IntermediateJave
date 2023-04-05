@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 public class Exceptions3WithWrapper {
 
-    List<String> siteAddresses = List.of("https://google.com", "https://xyz.com", "https://zyx.com");
+    List<String> siteAddresses = List.of("https://google.com", "https://zxy.com", "https://thethirdlane.com");
 
     //TODO - Part A.  This method should process a list of address and
     // return a List of results.  We have to turn each
@@ -76,6 +76,6 @@ public class Exceptions3WithWrapper {
         System.out.println("Results.size: " + results.size());
         results.forEach(System.out::println);
 
-        assertEquals(1, results.size());
+        assertEquals(2, results.size());
     }
 }
